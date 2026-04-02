@@ -116,12 +116,12 @@ clone_or_update_repo() {
     local temp_dir=$(mktemp -d)
     local repo_dir="$temp_dir/$REPO_NAME"
     
-    log_info "Downloading Chatit.Cloud from GitHub..." >&2
+    log_info "Downloading Chatit.Cloud from GitHub..."
     
-    if git clone --depth=1 "$REPO_URL.git" "$repo_dir" 2>/dev/null; then
-        log_success "Repository cloned" >&2
+    if git clone --depth=1 "$REPO_URL.git" "$repo_dir" >/dev/null 2>&1; then
+        log_success "Repository cloned"
     else
-        log_error "Failed to clone repository from $REPO_URL" >&2
+        log_error "Failed to clone repository from $REPO_URL"
         rm -rf "$temp_dir"
         return 1
     fi
