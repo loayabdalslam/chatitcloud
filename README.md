@@ -1,679 +1,591 @@
-# CC - AGENTIC CHATIT.CLOUD CODE ASSISTANT
+# Chatit.Cloud (CC) - Terminal AI Coding Assistant
 
-**Chatit** is a fork of Claude Code — a terminal-based AI coding assistant that helps you edit files, run commands, search codebases, and manage git workflows.
+**An advanced agentic AI coding assistant for the terminal with support for multiple AI providers, intelligent code analysis, and seamless GitHub integration.**
+
+[![Node.js Compatible](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
+[![Bun Compatible](https://img.shields.io/badge/Bun-%3E%3D1.0.0-000000?style=flat-square&logo=bun)](https://bun.sh/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](#license)
 
 ---
 
-## ⚡ ONE-COMMAND INSTALLATION
+## Overview
 
-### Linux / macOS
+**Chatit.Cloud (CC)** is a powerful terminal-based AI coding assistant designed to augment your development workflow. It provides intelligent code analysis, real-time assistance, and seamless integration with GitHub, all accessible directly from your terminal.
+
+### Key Features
+
+- 🤖 **Multi-Provider AI Support** - Works with Claude, OpenAI, and other AI providers
+- 🔧 **Rich Command Set** - 100+ specialized commands for different coding tasks
+- 📊 **Code Analysis** - Security reviews, performance analysis, and code optimization
+- 🌿 **Git Integration** - Native GitHub support for commits, PRs, branches, and reviews
+- 💰 **Cost Tracking** - Monitor and track API usage and costs
+- 🔐 **Secure Authentication** - OAuth, MDM, and keychain support for secure credentials
+- 🎨 **Beautiful TUI** - Terminal UI powered by React and Ink
+- 🚀 **Fast & Efficient** - Built with Bun for optimal performance
+- 🔌 **Extensible** - Plugin system with MCP (Model Context Protocol) support
+- 🎯 **Context-Aware** - Intelligent context management for better responses
+
+---
+
+## Quick Start
+
+### Installation
+
+Choose one of the following installation methods:
+
+#### Option 1: Fast Installation Script (Recommended)
+
 ```bash
-git clone https://github.com/loayabdalslam/chatitcloud.git ~/chatit && cd ~/chatit && chmod +x install.sh && ./install.sh
+curl -fsSL https://raw.githubusercontent.com/loayabdalslam/chatitcloud/main/install.sh | bash
 ```
 
-### Windows (PowerShell - Run as Administrator)
+Or on Windows (PowerShell):
+
 ```powershell
-git clone https://github.com/loayabdalslam/chatitcloud.git $env:USERPROFILE\chatit; cd $env:USERPROFILE\chatit; .\install.bat
+irm https://raw.githubusercontent.com/loayabdalslam/chatitcloud/main/install.ps1 | iex
 ```
 
-**⏱️ Takes ~2-3 minutes**  
-**✅ Automatically adds to PATH**  
-**✅ Sets up all configuration**  
-**✅ Ready to use immediately**
+#### Option 2: Manual Installation
 
----
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/loayabdalslam/chatitcloud.git
+   cd chatitcloud
+   ```
 
-## Quick Usage After Installation
+2. **Install dependencies:**
+   ```bash
+   # Using Bun (recommended for better performance)
+   bun install
+   
+   # Or using npm
+   npm install
+   ```
+
+3. **Build the project:**
+   ```bash
+   bun run build
+   # Or with npm
+   npm run build
+   ```
+
+4. **Add to PATH:**
+   ```bash
+   # Install globally
+   npm install -g .
+   
+   # Or create a symlink
+   sudo ln -s $(pwd)/dist/chatit.js /usr/local/bin/chatit
+   chmod +x dist/chatit.js
+   ```
+
+### First Run
+
+After installation, initialize Chatit with:
 
 ```bash
-# First run (interactive setup)
-chatit
-
-# Ask questions
-chatit "Help me with this code"
-
-# Change theme
-chatit /theme
-
-# Switch provider
-chatit /provider
-
-# View all commands
-chatit /help
+chatit init
 ```
 
----
-
-## What's Different in Chatit
-
-✨ **Rebranded** — From "Claude Code" to "CC - Agentic Chatit"  
-🎨 **New Theme** — Added "white" theme with Chatit blue accent (rgb(0,120,212))  
-🔌 **Multi-Provider Support** — Use Anthropic, OpenCode, or OpenRouter free tier models  
-💰 **Free Tier Models** — Gemini Flash, Mistral, Llama, Qwen without API keys  
-📦 **Simplified** — One-command install, automatic PATH setup  
+This will guide you through:
+- API provider selection (Claude, OpenAI, etc.)
+- API key configuration
+- GitHub authentication setup
+- Preferences and settings
 
 ---
 
-## Prerequisites
+## Core Commands
 
-- **Node.js** 18+ or **Bun** runtime
-- **Git** (for cloning)
-- Administrator access (Windows) or sudo if installing globally (Linux/macOS)
-- An API key for one of the supported providers (or use free tier models)
+### Session & Configuration
 
-**Don't have Node.js?**
-- Download: https://nodejs.org (18+)
-- Or install Bun: https://bun.sh (faster alternative)
+| Command | Description |
+|---------|-------------|
+| `chatit init` | Initialize and configure Chatit |
+| `chatit login` | Authenticate with your AI provider |
+| `chatit logout` | Sign out and clear credentials |
+| `chatit config` | View and modify settings |
+| `chatit status` | Check system status and configuration |
+| `chatit doctor` | Diagnose configuration and environment issues |
+
+### Code Analysis & Review
+
+| Command | Description |
+|---------|-------------|
+| `chatit review` | Review code for improvements and best practices |
+| `chatit security-review` | Perform security-focused code analysis |
+| `chatit brief` | Get a quick summary of code functionality |
+| `chatit diff` | Analyze code changes with AI assistance |
+| `chatit advisor [model]` | Set an advisor model for real-time guidance |
+| `chatit insights` | Generate insights about your codebase |
+
+### Git & GitHub Integration
+
+| Command | Description |
+|---------|-------------|
+| `chatit commit` | Generate intelligent commit messages |
+| `chatit commit-push-pr` | Commit, push, and create PR in one command |
+| `chatit branch` | Create and manage Git branches intelligently |
+| `chatit pr` | Create and manage pull requests |
+| `chatit issue` | Create and manage GitHub issues |
+| `chatit tag` | Create version tags with descriptions |
+
+### Development Tools
+
+| Command | Description |
+|---------|-------------|
+| `chatit plan` | Break down and plan development tasks |
+| `chatit tasks` | Track and manage project tasks |
+| `chatit bughunter` | Identify and analyze potential bugs |
+| `chatit autofix-pr` | Automatically fix issues in pull requests |
+| `chatit effort` | Estimate effort for tasks and features |
+| `chatit performance` | Analyze performance bottlenecks |
+
+### Context & Project Management
+
+| Command | Description |
+|---------|-------------|
+| `chatit context` | Manage AI context and conversation history |
+| `chatit add-dir` | Add directories to project context |
+| `chatit memory` | Access and manage persistent memory |
+| `chatit summary` | Generate project summaries |
+| `chatit session` | Manage chat sessions |
+| `chatit export` | Export conversations and sessions |
+
+### Cost & Usage Tracking
+
+| Command | Description |
+|---------|-------------|
+| `chatit cost` | View API usage and costs |
+| `chatit usage` | Check resource usage statistics |
+| `chatit rate-limit-options` | Configure rate limiting |
+| `chatit reset-limits` | Reset usage limits |
+
+### Utility Commands
+
+| Command | Description |
+|---------|-------------|
+| `chatit help` | Display command help |
+| `chatit version` | Show version information |
+| `chatit update` | Check for and install updates |
+| `chatit clear` | Clear terminal and history |
+| `chatit theme` | Customize terminal theme |
+| `chatit vim` | Toggle Vim keybindings |
 
 ---
 
-## Repository Link
+## Configuration
 
-📍 **GitHub**: https://github.com/loayabdalslam/chatitcloud.git 
-📍 **Issues**: https://github.com/loayabdalslam/chatitcloud/issues  
-📍 **Discussions**: https://github.com/loayabdalslam/chatitcloud/discussions
+### Environment Variables
 
----
+Key environment variables for Chatit configuration:
 
-## Installation Options
-
-### Option 1: Automated Installation (Recommended)
-
-**Linux/macOS:**
 ```bash
-git clone https://github.com/loayabdalslam/chatitcloud.git ~/chatit && \
-cd ~/chatit && \
-chmod +x install.sh && \
-./install.sh
+# AI Provider Configuration
+CLAUDE_API_KEY              # Anthropic Claude API key
+OPENAI_API_KEY              # OpenAI API key
+OPENCODE_API_KEY            # OpenCode AI API key
+
+# GitHub Configuration
+GITHUB_TOKEN                # GitHub personal access token
+GITHUB_OAUTH_TOKEN          # GitHub OAuth token
+
+# Application Settings
+CC_HOME                     # Chatit home directory (~/.chatit by default)
+CC_DEBUG                    # Enable debug mode
+CC_PROFILE                  # Enable performance profiling
+CC_REMOTE_SESSION_URL       # Custom remote session URL
 ```
 
-**Windows:**
-```powershell
-git clone https://github.com/loayabdalslam/chatitcloud.git $env:USERPROFILE\chatit; `
-cd $env:USERPROFILE\chatit; `
-.\install.bat
+### Configuration Files
+
+Chatit stores configuration in:
+
+- **Linux/macOS:** `~/.chatit/`
+- **Windows:** `%APPDATA%\.chatit\`
+
+Key configuration files:
+- `settings.json` - User preferences
+- `sessions.db` - Chat session history
+- `credentials.json` - Stored API keys (encrypted)
+
+---
+
+## Architecture
+
+### Project Structure
+
+```
+┌─ src/
+│  ├─ commands/              # 100+ command implementations
+│  ├─ components/            # React components for TUI
+│  ├─ services/              # Business logic (git, API, etc.)
+│  ├─ bridge/                # Remote session management
+│  ├─ tools/                 # Tool definitions and handlers
+│  ├─ plugins/               # Plugin system
+│  ├─ hooks/                 # React hooks
+│  ├─ utils/                 # Utility functions
+│  ├─ schemas/               # Zod validation schemas
+│  ├─ types/                 # TypeScript type definitions
+│  └─ main.tsx               # Application entry point
+│
+├─ dist/                     # Compiled output
+├─ package.json              # Dependencies and scripts
+└─ README.md                 # This file
 ```
 
-**What the installer does:**
-- ✅ Checks Node.js 18+ or Bun
-- ✅ Installs dependencies
-- ✅ Creates `~/.claude/` config directory
-- ✅ **Adds to PATH automatically**
-- ✅ Sets up global `chatit` command
-- ✅ Optionally configures API provider
+### Technology Stack
 
-### Option 2: Manual Installation
+- **Runtime:** Node.js 18+ or Bun 1.0+
+- **Language:** TypeScript 5.6
+- **UI Framework:** React 19 with Ink
+- **CLI Framework:** Commander.js
+- **Validation:** Zod
+- **AI Providers:** OpenAI SDK, Anthropic SDK
+- **Styling:** Chalk, Ink
+
+---
+
+## Development
+
+### Prerequisites
+
+- Node.js >= 18.0.0 or Bun >= 1.0.0
+- TypeScript 5.6
+- Git 2.0+
+
+### Setup
 
 ```bash
-# 1. Clone
+# Clone repository
 git clone https://github.com/loayabdalslam/chatitcloud.git
-cd chatit
+cd chatitcloud
 
-# 2. Install dependencies
+# Install dependencies
 bun install
-# OR
-npm install
 
-# 3. Run
-bun run src/main.tsx "Your prompt"
+# Start development mode
+bun run dev
+
+# Run linting
+bun run lint
+
+# Format code
+bun run format
+
+# Run tests
+bun run test
 ```
+
+### Build
+
+```bash
+# Build for production
+bun run build
+
+# Output is in dist/chatit.js
+```
+
+### Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `dev` | Start development mode with hot reload |
+| `build` | Build production bundle |
+| `start` | Run built application |
+| `test` | Run test suite |
+| `lint` | Check code with Biome linter |
+| `format` | Format code with Biome formatter |
 
 ---
 
-## Verify Installation
+## Advanced Usage
 
-After installation, verify everything works:
+### Custom AI Models
+
+Configure different AI models for different tasks:
 
 ```bash
-# Check if chatit command is available
-chatit --version
+# Set main model
+chatit /model opus
 
-# Run first time setup
-chatit
+# Set advisor model
+chatit /advisor sonnet
 
-# Test with a simple prompt
-chatit "Hello, what can you do?"
+# List available models
+chatit /model list
 ```
 
----
+### Plugin Development
 
-## Configure Your Machine
+Extend Chatit with custom plugins:
 
-### Add to PATH (If Not Already Done)
-
-**Linux/macOS:**
 ```bash
-# Check if already in PATH
-echo $PATH | grep .local/bin
+# Install a plugin
+chatit plugin install <plugin-url>
 
-# If not, add to ~/.bashrc or ~/.zshrc
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+# List installed plugins
+chatit plugin list
+
+# Develop a plugin
+# See plugins/ directory for examples
 ```
 
-**Windows:**
-The installer automatically adds `%USERPROFILE%\.chatit` to PATH.  
-Restart PowerShell or CMD after installation.
+### Remote Sessions
 
-### Set API Key
+Use Chatit with remote development environments:
 
 ```bash
-# Anthropic (requires API key)
-export ANTHROPIC_API_KEY="sk-ant-..."
+# Create remote session
+chatit remote-setup
 
-# Or use interactive login
-chatit /login
+# List remote sessions
+chatit session list
 
-# Verify it works
-chatit "Hello!"
+# Connect to remote environment
+chatit teleport <session-id>
 ```
 
----
+### Context Management
 
-## First Run
-
----
-
-## Provider Configuration
-
-First run will prompt you to choose a provider. You can also reconfigure anytime:
+Optimize AI context for better responses:
 
 ```bash
-chatit /provider
-```
+# Add directory context
+chatit add-dir src/
 
-### Anthropic (Default)
+# View current context
+chatit context show
 
-**Setup:**
-```bash
-export ANTHROPIC_API_KEY="sk-ant-..."
-chatit "analyze this code"
-```
+# Clear context
+chatit context clear
 
-**Or interactive login:**
-```bash
-chatit /login
-```
-
-**Available models:**
-- `claude-opus-4-6` (most capable)
-- `claude-sonnet-4-6` (balanced)
-- `claude-haiku-4-5` (fast)
-
-**Pricing:** Usage-based ($20 per million input tokens, $60 per million output tokens)
-
----
-
-### OpenRouter (Free Tier - No API Key)
-
-**Setup (completely free):**
-```bash
-chatit --provider openrouter
-chatit /model  # Select free model
-```
-
-**Free models available:**
-- **Gemini Flash 1.5** (Google - fastest)
-- **Mistral 7B** (Mistral - capable)
-- **Llama 3 8B** (Meta - open source)
-- **Qwen 2 7B** (Alibaba - high performance)
-
-**Cost:** Completely FREE for free tier models  
-**Get started in:** < 1 minute
-
----
-
-### OpenCode (Local Server - 75+ Providers)
-
-**Install and setup:**
-```bash
-# Install OpenCode globally
-npm install -g opencode
-
-# Start server
-opencode server
-
-# In another terminal, configure Chatit
-export OPENCODE_ENDPOINT="http://localhost:4096"
-chatit --provider opencode
-```
-
-**Benefits:**
-- Support for 75+ LLM providers
-- Run completely locally (no internet required)
-- Privacy-friendly (data stays local)
-- Free with local models
-
----
-
-## Environment Variables
-
-```bash
-# Anthropic
-export ANTHROPIC_API_KEY="sk-ant-..."
-export ANTHROPIC_MODEL="claude-opus-4-6"
-
-# OpenRouter (optional)
-export OPENROUTER_API_KEY="..."
-
-# Provider selection
-export CHATIT_PROVIDER="anthropic|openrouter|opencode"
-
-# OpenCode server
-export OPENCODE_ENDPOINT="http://localhost:4096"
-
-# Behavior
-export DEBUG=1
-export CHATIT_AUTOACCEPT=1
-```
-
-**Make permanent (add to `~/.bashrc`, `~/.zshrc`, or `~/.profile`):**
-```bash
-echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.bashrc
-source ~/.bashrc
-```
-
----
-
-## Common Commands
-
-```bash
-chatit /help              # Show all commands
-chatit /theme             # Change color theme
-chatit /model             # Switch AI model
-chatit /provider          # Switch AI provider
-chatit /config            # View/edit settings
-chatit /commit            # AI-assisted git commit
-chatit /diff              # Review recent changes
-chatit /memory            # Manage persistent memory
-chatit /cost              # Check token usage/costs
-chatit /login             # Authenticate (OAuth or API key)
-chatit /doctor            # Diagnose issues
+# Export context
+chatit context export
 ```
 
 ---
 
 ## Troubleshooting
 
-### "chatit: command not found"
+### Common Issues
 
-**Solution 1: Add to PATH**
+**Issue: "API key not found"**
 ```bash
-# Check if in PATH
-echo $PATH | grep ".local/bin"
-
-# If not, add it
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
-
-# Restart terminal and try again
-chatit --version
-```
-
-**Solution 2: Use full path**
-```bash
-~/.chatit/chatit "Your prompt"
-# or
-~/.local/bin/chatit "Your prompt"
-```
-
-### "Node.js 18+ required"
-
-**Install Node.js:**
-```bash
-# Visit https://nodejs.org and download 18+
-# Or use a package manager:
-
-# macOS (with Homebrew)
-brew install node
-
-# Ubuntu/Debian
-sudo apt update
-sudo apt install nodejs npm
-
-# Windows (with Chocolatey)
-choco install nodejs
-```
-
-**Or install Bun (faster alternative):**
-```bash
-curl -fsSL https://bun.sh/install | bash
-```
-
-### "API key not working"
-
-```bash
-# Verify key is set
-echo $ANTHROPIC_API_KEY
-
-# Check it's valid
-chatit /doctor
-
 # Re-authenticate
-chatit /login
-
-# Test connection
-chatit "Hello, can you see me?"
+chatit login
+# Or set environment variable
+export CLAUDE_API_KEY="your-key-here"
 ```
 
-### "npm install fails"
+**Issue: "GitHub authentication failed"**
+```bash
+# Re-authorize GitHub
+chatit logout
+chatit login
+# Or manually set token
+export GITHUB_TOKEN="your-token-here"
+```
+
+**Issue: "Command not found after installation"**
+```bash
+# Verify installation
+which chatit
+
+# Reinstall globally
+npm install -g .
+
+# Or add to PATH manually
+export PATH="$PATH:$(pwd)/dist"
+```
+
+**Issue: Slow performance**
+```bash
+# Use Bun instead of npm for better performance
+curl -fsSL https://bun.sh/install | bash
+bun install
+bun run build
+```
+
+### Diagnostic Commands
 
 ```bash
-# Clear npm cache
-npm cache clean --force
+# Check system status
+chatit doctor
 
-# Update npm
-npm install -g npm@latest
+# View debug information
+chatit debug-tool-call
 
-# Try again
-npm install
-```
+# Check API connectivity
+chatit status
 
-### "Out of context / Too many tokens"
+# View logs
+chatit --debug
 
-```bash
-# Compress context
-chatit /compact
-
-# Or start fresh conversation
-chatit --no-history "New topic"
-```
-
-### Windows PATH Issues
-
-If `chatit` is not found in PowerShell after installation:
-
-```powershell
-# Restart PowerShell or cmd as Administrator
-# Then try:
-chatit --version
-
-# If still not found, manually add to PATH:
-$env:Path += ";$env:USERPROFILE\.chatit"
-chatit --version
+# Profile startup performance
+CC_PROFILE=1 chatit init
 ```
 
 ---
 
-## Features & Tools
+## API Integration
 
-### AI Tools
-- **Read/Write/Edit** — File operations
-- **Bash** — Shell command execution
-- **Glob/Grep** — Code search
-- **WebFetch** — Fetch web content
-- **Agent** — Spawn sub-agents for parallel tasks
+### Supported Providers
 
-### Themes
+- **Anthropic Claude** - Primary support for Claude Opus, Sonnet, Haiku models
+- **OpenAI** - Support for GPT-4, GPT-4 Turbo, GPT-3.5 Turbo
+- **Custom Providers** - Via OpenCode AI SDK
 
-| Theme | Style | Accent |
-|-------|-------|--------|
-| `dark` | Dark background | Orange |
-| `light` | Light background | Orange |
-| **white** | Pure white ⭐ NEW | **Chatit Blue** |
-| `light-ansi` | Light ANSI only | ANSI colors |
-| `dark-ansi` | Dark ANSI only | ANSI colors |
-| `light-daltonized` | Color-blind friendly | Adjusted colors |
-| `dark-daltonized` | Color-blind friendly | Adjusted colors |
+### Rate Limiting
 
-Switch themes:
 ```bash
-chatit /theme
+# Configure rate limits
+chatit rate-limit-options
+
+# View current usage
+chatit cost
+
+# Reset usage counters
+chatit reset-limits
 ```
 
 ---
 
-## Themes
+## Security
 
-| Theme | Style | Accent |
-|-------|-------|--------|
-| `dark` | Dark background, light text | Orange |
-| `light` | Light background, dark text | Orange |
-| **white** | Pure white, black text | **Chatit Blue** |
-| `light-ansi` | Light ANSI colors only | ANSI Red |
-| `dark-ansi` | Dark ANSI colors only | ANSI Red |
+### Best Practices
 
-Switch themes with `/theme` command:
+1. **Never commit API keys** - Use environment variables
+2. **Use encrypted credentials** - Chatit encrypts stored API keys
+3. **Enable trusted device verification** - For added security
+4. **Keep updated** - Run `chatit update` regularly
+5. **Review permissions** - Check GitHub app permissions before authorizing
+
+### Data Privacy
+
+- Chat history stored locally in encrypted database
+- No telemetry without opt-in
+- Credentials stored securely using system keychain
+- MDM (Mobile Device Management) support for enterprise
+
+---
+
+## Performance
+
+### Optimization Tips
+
+1. **Use Bun runtime** - 2-3x faster than Node.js
+2. **Minimize context** - Include only relevant files in context
+3. **Use session caching** - Reuse sessions to avoid re-authentication
+4. **Enable model-specific optimizations** - Use `advisor` for real-time feedback
+5. **Monitor costs** - Run `chatit cost` to track expensive operations
+
+### Profiles
+
+View startup performance:
+
+```bash
+CC_PROFILE=1 chatit init
 ```
-chatit
-> /theme
-Choose the text style that looks best with your terminal:
-  ○ Dark
-  ○ Light
-  ○ White (Chatit)
-  ○ Light Daltonized
-  ○ Dark Daltonized
-  ○ Light ANSI
-  ○ Dark ANSI
-```
+
+---
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes and test thoroughly
+4. Run linter (`bun run lint`) and formatter (`bun run format`)
+5. Commit with clear messages
+6. Push to your fork and create a Pull Request
+
+### Code Standards
+
+- TypeScript with strict mode
+- Functional React components with hooks
+- Comprehensive error handling
+- JSDoc comments for public APIs
+- Tests for new features
 
 ---
 
 ## Documentation
 
-After installation, read these guides for detailed information:
-
-| Document | Purpose | Read with |
-|----------|---------|-----------|
-| **QUICK_START.md** | Getting started quickly | `cat ~/.chatit/QUICK_START.md` |
-| **INSTALLATION_GUIDE.md** | Detailed setup instructions | `cat ~/.chatit/INSTALLATION_GUIDE.md` |
-| **COMMANDS_REFERENCE.md** | Complete command reference | `cat ~/.chatit/COMMANDS_REFERENCE.md` |
-| **CHATIT_README.md** | Full user guide | `cat ~/.chatit/CHATIT_README.md` |
-| **FILES_CREATED_SUMMARY.md** | What was created | `cat ~/.chatit/FILES_CREATED_SUMMARY.md` |
+- [Installation Guide](docs/installation.md)
+- [Configuration Reference](docs/config.md)
+- [Command Reference](docs/commands.md)
+- [Plugin Development](docs/plugins.md)
+- [API Reference](docs/api.md)
+- [Troubleshooting Guide](docs/troubleshooting.md)
 
 ---
 
-## Getting Help
+## Roadmap
 
-### In-App Help
-```bash
-chatit /help              # Show all commands
-chatit /doctor            # Diagnose installation issues
-chatit --version          # Show version
-```
+### Upcoming Features
 
-### Enable Debug Mode
-```bash
-export DEBUG=1
-chatit "Your prompt"      # Detailed logging
-```
-
-### Online Resources
-- 📍 **GitHub**: https://github.com/yourusername/chatit
-- 🐛 **Issues**: https://github.com/yourusername/chatit/issues
-- 💡 **Discussions**: https://github.com/yourusername/chatit/discussions
+- 🔮 Vision model support for screenshot analysis
+- 📱 Mobile app integration
+- 🌐 Web UI dashboard
+- 🔄 Real-time collaboration features
+- 📈 Advanced analytics and insights
+- 🎓 Built-in tutorials and learning paths
 
 ---
 
-## Configuration Files
+## FAQ
 
-Your configuration is stored in:
+**Q: Do I need to pay to use Chatit?**
+A: Chatit is free, but requires API keys from AI providers (Claude, OpenAI, etc.) which may have associated costs.
 
-**Linux/macOS:**
-```bash
-~/.claude/              # Global config directory
-~/.chatit/              # Installation directory
-```
+**Q: Can I use multiple AI providers?**
+A: Yes, configure different models with `/model` command and use `/advisor` for secondary models.
 
-**Windows:**
-```
-%USERPROFILE%\.claude\
-%USERPROFILE%\.chatit\
-```
+**Q: Is my code sent to external servers?**
+A: Only the code you explicitly share is sent to AI providers. Local configuration and history are stored encrypted locally.
 
-**Key files:**
-```bash
-~/.claude/settings.json    # Your preferences
-~/.claude/config.json      # Global configuration
-~/.claude/cache/           # Temporary caches
-~/.claude/memory/          # Persistent memory
-```
+**Q: Can I use Chatit in CI/CD pipelines?**
+A: Yes, Chatit supports automated workflows via environment variables and non-interactive mode.
+
+**Q: How do I report bugs?**
+A: Please open an issue on [GitHub Issues](https://github.com/loayabdalslam/chatitcloud/issues).
 
 ---
 
-## Updating Chatit
+## Support
 
-```bash
-# Navigate to installation
-cd ~/.chatit
-
-# Pull latest changes
-git pull origin main
-
-# Reinstall dependencies
-bun install  # or: npm install
-
-# Verify update
-chatit --version
-```
-
----
-
-## Uninstalling
-
-```bash
-# Remove installation
-rm -rf ~/.chatit
-
-# Remove global command
-sudo rm /usr/local/bin/chatit
-# or
-rm ~/.local/bin/chatit
-
-# (Optional) Remove config files
-rm -rf ~/.claude
-```
-
----
-
-## Usage Examples
-
-### Ask for Code Review
-```bash
-chatit "Review this code for bugs and performance issues"
-```
-
-### Refactor Code
-```bash
-chatit "Refactor this function to be more readable"
-```
-
-### Write Tests
-```bash
-chatit "Write unit tests for this function"
-```
-
-### Pipe File Content
-```bash
-cat myfile.js | chatit "Explain what this code does"
-```
-
-### Interactive Session
-```bash
-chatit
-> /theme
-> white
-> chatit "Analyze this codebase"
-> /model
-> /provider
-> exit
-```
-
-### Git Operations
-```bash
-chatit /commit         # AI-assisted commit message
-chatit /diff           # Review recent changes
-```
-
----
-
-## Project Structure
-
-```
-.
-├── src/
-│   ├── main.tsx                           # CLI entrypoint
-│   ├── components/
-│   │   ├── LogoV2/                        # Branding (Chatit logo)
-│   │   ├── ProviderSelector.tsx           # NEW: Provider choice UI
-│   │   ├── Onboarding.tsx                 # First-run setup flow
-│   │   └── ModelPicker.tsx                # Model selection
-│   ├── utils/
-│   │   ├── theme.ts                       # Theme definitions (includes white)
-│   │   ├── model/
-│   │   │   ├── providers.ts               # Provider types
-│   │   │   └── freeTierModels.ts          # NEW: Free model list
-│   │   └── config.ts                      # Config schema
-│   └── ...
-├── package.json                           # NEW: Dependencies & scripts
-└── README.md                              # This file
-```
-
----
-
-## Building
-
-```bash
-# Build with Bun
-bun run build
-
-# Output: dist/chatit.js
-```
-
----
-
-## Extending Chatit
-
-### Add a New Provider
-1. Update `APIProvider` type in `src/utils/model/providers.ts`
-2. Add config fields in `src/utils/config.ts`
-3. Update `ProviderSelector.tsx` with the new option
-4. Implement API client in appropriate service module
-
-### Add Custom Models
-Edit `src/utils/model/freeTierModels.ts` or `src/utils/model/configs.ts`.
-
-### Add a Custom Command
-1. Create `src/commands/mycommand/index.ts`
-2. Register in `src/commands.ts`
-3. Add to command parser in `src/main.tsx`
-
----
-
-## Credits & Team
-
-### Chatit Team
-- **Loaii Abdalslam** — Project Lead, Architecture & Core Development
-- **Chatit Team** — UI/UX Design, Provider Integration, Documentation
-
-### Key Contributions
-- 🎨 White theme with Chatit blue accent
-- 🔌 Multi-provider support (Anthropic, OpenCode, OpenRouter)
-- 💰 Free tier models without API key requirement
-- 📦 Simplified installation and configuration
-- 🚀 Enhanced documentation and quick start guide
-
-### Original Project
-
-This is a fork of Claude Code source code that was leaked via npm source maps in March 2026. All original code is the property of [Anthropic](https://www.anthropic.com).
-
-**Chatit** is a community fork adding multi-provider support, free tier models, and simplified configuration.
-
-### Thanks to
-- **Anthropic** — For creating Claude Code
-- **Chaofan Shou** — For discovering the source leak
-- **Open Source Community** — React, Ink, Commander.js, and all dependencies
-
----
-
-## Support & Contributing
-
-- 🐛 **Issues** — GitHub Issues
-- 💡 **Ideas** — GitHub Discussions
-- 🤝 **Pull Requests** — Contributions welcome!
+- 📚 **Documentation:** [docs/](docs/)
+- 🐛 **Bug Reports:** [GitHub Issues](https://github.com/loayabdalslam/chatitcloud/issues)
+- 💬 **Discussions:** [GitHub Discussions](https://github.com/loayabdalslam/chatitcloud/discussions)
+- 📧 **Email Support:** support@chatit.cloud
 
 ---
 
 ## License
 
-MIT — See LICENSE file
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgments
+
+Built with modern web technologies and inspired by the best practices of terminal-first development tools.
+
+- Powered by [Anthropic Claude](https://www.anthropic.com/)
+- Built with [React](https://react.dev/) and [Ink](https://github.com/vadimdemedes/ink)
+- CLI framework: [Commander.js](https://commander.js.org/)
+- Runtime: [Bun](https://bun.sh/) / [Node.js](https://nodejs.org/)
+
+---
+
+### Made with ❤️ by the Chatit.Cloud Team
+
+**Last Updated:** April 2, 2026  
+**Version:** 0.1.0
+
+For the latest updates, visit [https://github.com/loayabdalslam/chatitcloud](https://github.com/loayabdalslam/chatitcloud)

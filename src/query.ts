@@ -654,7 +654,7 @@ async function* queryLoop(
       while (attemptWithFallback) {
         attemptWithFallback = false
         try {
-          let streamingFallbackOccured = false
+          let streamingFallbackOccurred = false
           queryCheckpoint('query_api_streaming_start')
           for await (const message of deps.callModel({
             messages: prependUserContext(messagesForQuery, userContext),
@@ -676,7 +676,7 @@ async function* queryLoop(
                 toolUseContext.options.isNonInteractiveSession,
               fallbackModel,
               onStreamingFallback: () => {
-                streamingFallbackOccured = true
+                streamingFallbackOccurred = true
               },
               querySource,
               agents: toolUseContext.options.agentDefinitions.activeAgents,
@@ -709,7 +709,7 @@ async function* queryLoop(
             // We won't use the tool_calls from the first attempt
             // We could.. but then we'd have to merge assistant messages
             // with different ids and double up on full the tool_results
-            if (streamingFallbackOccured) {
+            if (streamingFallbackOccurred) {
               // Yield tombstones for orphaned messages so they're removed from UI and transcript.
               // These partial messages (especially thinking blocks) have invalid signatures
               // that would cause "thinking blocks cannot be modified" API errors.
