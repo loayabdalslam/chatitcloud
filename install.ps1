@@ -118,6 +118,9 @@ function Get-RepositoryClone {
 }
 
 function Get-RuntimeEngine {
+    if (Get-Command bun -ErrorAction SilentlyContinue) {
+        return "bun"
+    }
     if (Get-Command npm -ErrorAction SilentlyContinue) {
         return "npm"
     }
@@ -130,22 +133,37 @@ function Build-Project {
     Push-Location $RepoDir
     try {
         [ConsoleWriter]::Info("Installing dependencies...")
-        
-        npm install 2>&1 | Write-Verbose
-        if ($LASTEXITCODE -ne 0) {
-            [ConsoleWriter]::Error("Failed to install dependencies")
-            return $false
+
+        # npm install with dependency conflict avoidance
+        if (-not (npm install --legacy-peer-deps 2>&1 | Write-Verbose)) {
+            if ($LASTEXITCODE -ne 0) {
+                [ConsoleWriter]::Error("npm install --legacy-peer-deps failed. Please inspect npm output and fix dependencies.")
+                return $false
+            }
         }
-        
+
         [ConsoleWriter]::Success("Dependencies installed")
-        
+
         [ConsoleWriter]::Info("Building project...")
-        npm run build 2>&1 | Write-Verbose
-        if ($LASTEXITCODE -ne 0) {
-            [ConsoleWriter]::Error("Build failed")
-            return $false
+
+        if (Get-Command bun -ErrorAction SilentlyContinue) {
+            if (-not (bun run build 2>&1 | Write-Verbose)) {
+                if ($LASTEXITCODE -ne 0) {
+                    [ConsoleWriter]::Error("bun build failed. Please install or update Bun from https://bun.sh/")
+                    return $false
+                }
+            }
         }
-        
+        else {
+            [ConsoleWriter]::Warning("Bun not found. Attempting npm run build. If this fails, install Bun from https://bun.sh/")
+            if (-not (npm run build 2>&1 | Write-Verbose)) {
+                if ($LASTEXITCODE -ne 0) {
+                    [ConsoleWriter]::Error("npm run build failed. Ensure Bun is installed or run 'npm run build' manually after installing Bun.")
+                    return $false
+                }
+            }
+        }
+
         [ConsoleWriter]::Success("Project built successfully")
         return $true
     }
