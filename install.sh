@@ -265,7 +265,7 @@ print_next_steps() {
     echo "Next steps:"
     echo ""
     echo "1. Reload your shell configuration:"
-    echo "   source \$HOME/.$(basename "$SHELL")rc"
+    echo "   source \$HOME/.${SHELL##*/}rc"
     echo ""
     echo "2. Initialize Chatit.Cloud:"
     echo "   chatit init"

@@ -189,8 +189,8 @@ function Update-PathEnvironment {
     if ($currentPath -notlike "*$InstallDirectory*") {
         $newPath = "$InstallDirectory;$currentPath"
         [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
-        [ConsoleWriter]::Success("PATH updated in User environment"
-        
+        [ConsoleWriter]::Success("PATH updated in User environment")
+
         # Also update for current session
         $env:Path = $newPath
         
@@ -301,8 +301,8 @@ function Invoke-Installation {
         exit 1
     }
     
-    [ConsoleWriter]::Success("Using $runtime for build"
-    
+    [ConsoleWriter]::Success("Using $runtime for build")
+
     # Step 5: Build
     if (-not (Build-Project $repoDir)) {
         Remove-TempDirectory $repoDir
