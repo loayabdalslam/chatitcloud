@@ -267,7 +267,31 @@ function Build-Project {
                     return $true
                 }
                 
-                # Workaround 4: Check if build file exists despite error
+                # Workaround 4: Fix/create build configuration for path aliases
+                [ConsoleWriter]::Info("Workaround 4: Ensuring path alias configuration...")
+                
+                # Check if bunfig.toml exists, if not create minimal config
+                $bunfigPath = Join-Path (Get-Location) "bunfig.toml"
+                $bunConfigPath = Join-Path (Get-Location) "bun.config.ts"
+                
+                if ((-not (Test-Path $bunfigPath)) -and (-not (Test-Path $bunConfigPath))) {
+                    $bunfigContent = @"
+[root]
+alias = { src = "./src" }
+"@
+                    Set-Content -Path $bunfigPath -Value $bunfigContent
+                    [ConsoleWriter]::Info("Created bunfig.toml with src alias")
+                }
+                
+                # Attempt build again with fixed config
+                $buildOutput = bun run build 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    [ConsoleWriter]::Success("Build succeeded after path alias configuration")
+                    [ConsoleWriter]::Success("Project built successfully")
+                    return $true
+                }
+                
+                # Workaround 5: Check if build file exists despite error
                 if ((Test-Path "dist/chatit.js") -and ((Get-Item "dist/chatit.js").Length -gt 0)) {
                     $fileSize = (Get-Item "dist/chatit.js").Length
                     [ConsoleWriter]::Warning("Build reported errors but output file exists ($fileSize bytes)")

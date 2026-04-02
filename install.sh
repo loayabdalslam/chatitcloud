@@ -272,7 +272,26 @@ build_project() {
                         fi
                     fi
                     
-                    # Workaround 4: Check if build file exists despite error
+                    # Workaround 4: Fix/create build configuration for path aliases
+                    log_info "Workaround 4: Ensuring path alias configuration..."
+                    
+                    # Check if bunfig.toml exists, if not create minimal config
+                    if [ ! -f "bunfig.toml" ] && [ ! -f "bun.config.ts" ]; then
+                        cat > bunfig.toml <<'EOF'
+[root]
+alias = { src = "./src" }
+EOF
+                        log_info "Created bunfig.toml with src alias"
+                    fi
+                    
+                    # Try build again with configuration
+                    if bun run build 2>&1 | tee /tmp/build.log; then
+                        log_success "Build succeeded after path alias configuration"
+                        log_success "Project built successfully"
+                        return 0
+                    fi
+                    
+                    # Workaround 5: Check if build file exists despite error
                     if [ -f "dist/chatit.js" ] && [ -s "dist/chatit.js" ]; then
                         file_size=$(wc -c < "dist/chatit.js")
                         log_warning "Build reported errors but output file exists ($file_size bytes)"
@@ -338,7 +357,26 @@ build_project() {
                         fi
                     fi
                     
-                    # Workaround 4: Check if build file exists despite error
+                    # Workaround 4: Fix/create build configuration for path aliases
+                    log_info "Workaround 4: Ensuring path alias configuration..."
+                    
+                    # Check if bunfig.toml exists, if not create minimal config
+                    if [ ! -f "bunfig.toml" ] && [ ! -f "bun.config.ts" ]; then
+                        cat > bunfig.toml <<'EOF'
+[root]
+alias = { src = "./src" }
+EOF
+                        log_info "Created bunfig.toml with src alias"
+                    fi
+                    
+                    # Attempt npm build again with fixed config
+                    if npm run build 2>&1 | tee /tmp/build.log; then
+                        log_success "Build succeeded after path alias configuration"
+                        log_success "Project built successfully"
+                        return 0
+                    fi
+                    
+                    # Workaround 5: Check if build file exists despite error
                     if [ -f "dist/chatit.js" ] && [ -s "dist/chatit.js" ]; then
                         file_size=$(wc -c < "dist/chatit.js")
                         log_warning "Build reported errors but output file exists ($file_size bytes)"
