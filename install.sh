@@ -150,13 +150,19 @@ build_project() {
         bun)
             if ! bun install --frozen-lockfile 2>/dev/null; then
                 log_warning "Bun install failed, retrying without frozen-lockfile..."
-                bun install
+                if ! bun install; then
+                    log_error "Bun install failed. Please install Bun manually: https://bun.sh/"
+                    return 1
+                fi
             fi
             ;;
         npm)
             if ! npm ci 2>/dev/null; then
-                log_warning "npm ci failed, using npm install..."
-                npm install
+                log_warning "npm ci failed, using npm install --legacy-peer-deps..."
+                if ! npm install --legacy-peer-deps; then
+                    log_error "npm install --legacy-peer-deps failed. Please inspect npm output and fix dependencies."
+                    return 1
+                fi
             fi
             ;;
     esac
@@ -166,10 +172,20 @@ build_project() {
     log_info "Building project..."
     case "$runtime" in
         bun)
-            bun run build
+            if ! bun run build; then
+                log_error "bun build failed. Please install/update Bun: https://bun.sh/"
+                return 1
+            fi
             ;;
         npm)
-            npm run build
+            if ! npm run build; then
+                if ! command -v bun >/dev/null 2>&1; then
+                    log_error "npm build failed because Bun is required and not installed. Install Bun: https://bun.sh/."
+                else
+                    log_error "npm build failed. See npm output for details."
+                fi
+                return 1
+            fi
             ;;
     esac
     
