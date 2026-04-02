@@ -81,7 +81,7 @@ chatit /help
 
 **Linux/macOS:**
 ```bash
-git clone https://github.com/yourusername/chatit.git ~/chatit && \
+git clone https://github.com/loayabdalslam/chatitcloud.git ~/chatit && \
 cd ~/chatit && \
 chmod +x install.sh && \
 ./install.sh
@@ -89,7 +89,7 @@ chmod +x install.sh && \
 
 **Windows:**
 ```powershell
-git clone https://github.com/yourusername/chatit.git $env:USERPROFILE\chatit; `
+git clone https://github.com/loayabdalslam/chatitcloud.git $env:USERPROFILE\chatit; `
 cd $env:USERPROFILE\chatit; `
 .\install.bat
 ```
@@ -106,7 +106,7 @@ cd $env:USERPROFILE\chatit; `
 
 ```bash
 # 1. Clone
-git clone https://github.com/yourusername/chatit.git
+git clone https://github.com/loayabdalslam/chatitcloud.git
 cd chatit
 
 # 2. Install dependencies
