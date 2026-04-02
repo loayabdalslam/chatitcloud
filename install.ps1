@@ -38,37 +38,87 @@ class ConsoleWriter {
 }
 
 # System Check Functions
+function Install-Npm {
+    [ConsoleWriter]::Info("Installing Node.js and npm...")
+    
+    # Check if chocolatey is available
+    if (Get-Command choco -ErrorAction SilentlyContinue) {
+        & choco install nodejs -y
+    }
+    # Check if winget is available  
+    elseif (Get-Command winget -ErrorAction SilentlyContinue) {
+        & winget install OpenJS.NodeJS -e
+    }
+    else {
+        # Fallback: Download from nodejs.org
+        [ConsoleWriter]::Warning("Neither chocolatey nor winget found. Downloading Node.js installer...")
+        $nodeUrl = "https://nodejs.org/dist/v20.0.0/node-v20.0.0-x64.msi"
+        $installerPath = "$env:TEMP\node-installer.msi"
+        
+        try {
+            Invoke-WebRequest -Uri $nodeUrl -OutFile $installerPath -ErrorAction Stop
+            & msiexec.exe /i $installerPath /quiet
+            Remove-Item $installerPath -Force
+        }
+        catch {
+            [ConsoleWriter]::Error("Failed to download Node.js. Please install manually from https://nodejs.org/")
+            return $false
+        }
+    }
+    
+    # Refresh PATH
+    $env:Path = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [Environment]::GetEnvironmentVariable("Path", "User")
+    
+    [ConsoleWriter]::Success("Node.js and npm installed")
+    return $true
+}
+
+function Install-Bun {
+    [ConsoleWriter]::Info("Installing Bun...")
+    
+    try {
+        $bunInstallScript = @"
+`$BunInstall = Join-Path `$env:USERPROFILE '.bun' 'install' 'bun-windows-x64.exe'
+Invoke-Expression (Invoke-WebRequest -Uri 'https://bun.sh/install.ps1' -UseBasicParsing).Content -Force
+`"@
+        Invoke-Expression 'Invoke-WebRequest -Uri "https://bun.sh/install.ps1" -UseBasicParsing | Invoke-Expression'
+        
+        # Add bun to PATH
+        `$env:Path = (Join-Path `$env:USERPROFILE '.bun' 'bin') + ";" + `$env:Path
+    }
+    catch {
+        [ConsoleWriter]::Error("Failed to install Bun. Please install manually from https://bun.sh/")
+        return `$false
+    }
+    
+    [ConsoleWriter]::Success("Bun installed")
+    return `$true
+}
+
 function Test-RequiredTools {
     [ConsoleWriter]::Info("Checking required tools...")
     
-    $missingTools = @()
-    
     # Check for Git
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-        $missingTools += "Git"
-    }
-    
-    # Check for Node or npm
-    if (-not (Get-Command node -ErrorAction SilentlyContinue) -and `
-        -not (Get-Command npm -ErrorAction SilentlyContinue)) {
-        $missingTools += "Node.js (npm)"
-    }
-    
-    if ($missingTools.Count -gt 0) {
-        [ConsoleWriter]::Error("Missing required tools: $($missingTools -join ', ')")
-        Write-Host ""
-        Write-Host "Please install:"
-        foreach ($tool in $missingTools) {
-            switch ($tool) {
-                "Git" {
-                    Write-Host "  • Git: https://git-scm.com/download/win"
-                }
-                "Node.js (npm)" {
-                    Write-Host "  • Node.js (>= 18.0.0): https://nodejs.org/"
-                }
-            }
-        }
+        [ConsoleWriter]::Error("Git not found. Please install from https://git-scm.com/download/win")
         return $false
+    }
+    
+    # Check for npm and install if missing
+    if (-not (Get-Command npm -ErrorAction SilentlyContinue) -and `
+        -not (Get-Command node -ErrorAction SilentlyContinue)) {
+        [ConsoleWriter]::Warning("npm not found")
+        if (-not (Install-Npm)) {
+            return $false
+        }
+    }
+    
+    # Check for bun and install if missing
+    if (-not (Get-Command bun -ErrorAction SilentlyContinue)) {
+        [ConsoleWriter]::Warning("Bun not found")
+        if (-not (Install-Bun)) {
+            return $false
+        }
     }
     
     [ConsoleWriter]::Success("All required tools found")
@@ -146,21 +196,16 @@ function Build-Project {
 
         [ConsoleWriter]::Info("Building project...")
 
-        if (Get-Command bun -ErrorAction SilentlyContinue) {
-            if (-not (bun run build 2>&1 | Write-Verbose)) {
-                if ($LASTEXITCODE -ne 0) {
-                    [ConsoleWriter]::Error("bun build failed. Please install or update Bun from https://bun.sh/")
-                    return $false
-                }
-            }
+        # Check for bun requirement (build script requires bun)
+        if (-not (Get-Command bun -ErrorAction SilentlyContinue)) {
+            [ConsoleWriter]::Error("Bun is required for building but not installed. Please install from https://bun.sh/")
+            return $false
         }
-        else {
-            [ConsoleWriter]::Warning("Bun not found. Attempting npm run build. If this fails, install Bun from https://bun.sh/")
-            if (-not (npm run build 2>&1 | Write-Verbose)) {
-                if ($LASTEXITCODE -ne 0) {
-                    [ConsoleWriter]::Error("npm run build failed. Ensure Bun is installed or run 'npm run build' manually after installing Bun.")
-                    return $false
-                }
+
+        if (-not (bun run build 2>&1 | Write-Verbose)) {
+            if ($LASTEXITCODE -ne 0) {
+                [ConsoleWriter]::Error("bun build failed. Please install or update Bun from https://bun.sh/")
+                return $false
             }
         }
 

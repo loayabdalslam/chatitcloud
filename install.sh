@@ -49,37 +49,82 @@ log_warning() {
 # System Check Functions
 ###############################################################################
 
+install_npm() {
+    log_info "Installing Node.js and npm..."
+    
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        if ! command -v brew &> /dev/null; then
+            log_error "Homebrew not found. Please install from https://brew.sh"
+            return 1
+        fi
+        brew install node
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        # Linux
+        if command -v apt-get &> /dev/null; then
+            # Ubuntu/Debian
+            sudo apt-get update && sudo apt-get install -y nodejs npm
+        elif command -v yum &> /dev/null; then
+            # RHEL/CentOS
+            sudo yum install -y nodejs npm
+        elif command -v dnf &> /dev/null; then
+            # Fedora
+            sudo dnf install -y nodejs npm
+        else
+            log_error "Could not detect package manager. Please install Node.js manually from https://nodejs.org/"
+            return 1
+        fi
+    elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+        # Windows (Git Bash)
+        log_error "Please install Node.js manually from https://nodejs.org/ on Windows"
+        return 1
+    else
+        log_error "Unknown OS. Please install Node.js manually from https://nodejs.org/"
+        return 1
+    fi
+    
+    log_success "Node.js and npm installed"
+    return 0
+}
+
+install_bun() {
+    log_info "Installing Bun..."
+    
+    if ! curl -fsSL https://bun.sh/install | bash 2>/dev/null; then
+        log_error "Failed to install Bun. Please install manually from https://bun.sh/"
+        return 1
+    fi
+    
+    # Add bun to PATH for current session
+    export PATH="$HOME/.bun/bin:$PATH"
+    
+    log_success "Bun installed"
+    return 0
+}
+
 check_required_tools() {
     log_info "Checking required tools..."
     
-    local missing_tools=()
-    
     # Check for git
     if ! command -v git &> /dev/null; then
-        missing_tools+=("git")
-    fi
-    
-    # Check for node or bun
-    if ! command -v node &> /dev/null && ! command -v bun &> /dev/null; then
-        missing_tools+=("node (or bun)")
-    fi
-    
-    if [ ${#missing_tools[@]} -gt 0 ]; then
-        log_error "Missing required tools: ${missing_tools[*]}"
-        echo ""
-        echo "Please install:"
-        for tool in "${missing_tools[@]}"; do
-            case $tool in
-                git)
-                    echo "  • Git: https://git-scm.com/downloads"
-                    ;;
-                node*)
-                    echo "  • Node.js (>= 18.0.0): https://nodejs.org/"
-                    echo "    OR Bun (>= 1.0.0): https://bun.sh/"
-                    ;;
-            esac
-        done
+        log_error "Git not found. Please install from https://git-scm.com/downloads"
         return 1
+    fi
+    
+    # Check for npm and install if missing
+    if ! command -v npm &> /dev/null && ! command -v node &> /dev/null; then
+        log_warning "npm not found"
+        if ! install_npm; then
+            return 1
+        fi
+    fi
+    
+    # Check for bun and install if missing
+    if ! command -v bun &> /dev/null; then
+        log_warning "Bun not found"
+        if ! install_bun; then
+            return 1
+        fi
     fi
     
     log_success "All required tools found"
@@ -170,6 +215,13 @@ build_project() {
     log_success "Dependencies installed"
     
     log_info "Building project..."
+    
+    # Check for bun requirement (build script requires bun)
+    if ! command -v bun >/dev/null 2>&1; then
+        log_error "Bun is required for building but not installed. Please install from https://bun.sh/"
+        return 1
+    fi
+    
     case "$runtime" in
         bun)
             if ! bun run build; then
@@ -179,11 +231,7 @@ build_project() {
             ;;
         npm)
             if ! npm run build; then
-                if ! command -v bun >/dev/null 2>&1; then
-                    log_error "npm build failed because Bun is required and not installed. Install Bun: https://bun.sh/."
-                else
-                    log_error "npm build failed. See npm output for details."
-                fi
+                log_error "npm run build failed. See npm output for details."
                 return 1
             fi
             ;;
