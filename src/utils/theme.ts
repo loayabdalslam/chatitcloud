@@ -91,6 +91,7 @@ export type Theme = {
 export const THEME_NAMES = [
   'dark',
   'light',
+  'white',
   'light-daltonized',
   'dark-daltonized',
   'light-ansi',
@@ -188,6 +189,24 @@ const lightTheme: Theme = {
   rainbow_blue_shimmer: 'rgb(180,205,240)',
   rainbow_indigo_shimmer: 'rgb(195,180,230)',
   rainbow_violet_shimmer: 'rgb(230,180,210)',
+}
+
+/**
+ * White theme with Chatit blue accent - pure white background, black text, Chatit brand blue
+ */
+const whiteTheme: Theme = {
+  ...lightTheme,
+  claude: 'rgb(0,120,212)', // Chatit blue
+  claudeShimmer: 'rgb(51,153,255)',
+  clawd_body: 'rgb(0,120,212)',
+  briefLabelClaude: 'rgb(0,120,212)',
+  userMessageBackground: 'rgb(255,255,255)',
+  userMessageBackgroundHover: 'rgb(248,248,248)',
+  selectionBg: 'rgb(180,213,255)',
+  text: 'rgb(0,0,0)',
+  background: 'rgb(255,255,255)',
+  permission: 'rgb(0,120,212)',
+  suggestion: 'rgb(0,120,212)',
 }
 
 /**
@@ -599,6 +618,8 @@ export function getTheme(themeName: ThemeName): Theme {
   switch (themeName) {
     case 'light':
       return lightTheme
+    case 'white':
+      return whiteTheme
     case 'light-ansi':
       return lightAnsiTheme
     case 'dark-ansi':

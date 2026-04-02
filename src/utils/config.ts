@@ -575,6 +575,11 @@ export type GlobalConfig = {
   // CURRENT_MIGRATION_VERSION, runMigrations() skips all sync migrations
   // (avoiding 11× saveGlobalConfig lock+re-read on every startup).
   migrationVersion?: number
+
+  // Chatit provider configuration
+  provider?: 'anthropic' | 'opencode' | 'openrouter'
+  opencodeEndpoint?: string // URL for OpenCode server (default: http://localhost:4096)
+  openrouterApiKey?: string // API key for OpenRouter (optional - has free tier)
 }
 
 /**
