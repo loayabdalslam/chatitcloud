@@ -2,99 +2,424 @@
 
 **Chatit** is a fork of Claude Code — a terminal-based AI coding assistant that helps you edit files, run commands, search codebases, and manage git workflows.
 
+---
+
+## ⚡ ONE-COMMAND INSTALLATION
+
+### Linux / macOS
+```bash
+git clone https://github.com/yourusername/chatit.git ~/chatit && cd ~/chatit && chmod +x install.sh && ./install.sh
+```
+
+### Windows (PowerShell - Run as Administrator)
+```powershell
+git clone https://github.com/yourusername/chatit.git $env:USERPROFILE\chatit; cd $env:USERPROFILE\chatit; .\install.bat
+```
+
+**⏱️ Takes ~2-3 minutes**  
+**✅ Automatically adds to PATH**  
+**✅ Sets up all configuration**  
+**✅ Ready to use immediately**
+
+---
+
+## Quick Usage After Installation
+
+```bash
+# First run (interactive setup)
+chatit
+
+# Ask questions
+chatit "Help me with this code"
+
+# Change theme
+chatit /theme
+
+# Switch provider
+chatit /provider
+
+# View all commands
+chatit /help
+```
+
+---
+
 ## What's Different in Chatit
 
 ✨ **Rebranded** — From "Claude Code" to "CC - Agentic Chatit"  
 🎨 **New Theme** — Added "white" theme with Chatit blue accent (rgb(0,120,212))  
 🔌 **Multi-Provider Support** — Use Anthropic, OpenCode, or OpenRouter free tier models  
 💰 **Free Tier Models** — Gemini Flash, Mistral, Llama, Qwen without API keys  
-📦 **Simplified** — Cleaner config, added package.json, ready to build and run
+📦 **Simplified** — One-command install, automatic PATH setup  
 
 ---
 
-## Quick Start
+## Prerequisites
 
-### Prerequisites
 - **Node.js** 18+ or **Bun** runtime
+- **Git** (for cloning)
+- Administrator access (Windows) or sudo if installing globally (Linux/macOS)
 - An API key for one of the supported providers (or use free tier models)
 
-### Installation
+**Don't have Node.js?**
+- Download: https://nodejs.org (18+)
+- Or install Bun: https://bun.sh (faster alternative)
 
+---
+
+## Repository Link
+
+📍 **GitHub**: https://github.com/yourusername/chatit  
+📍 **Issues**: https://github.com/yourusername/chatit/issues  
+📍 **Discussions**: https://github.com/yourusername/chatit/discussions
+
+---
+
+## Installation Options
+
+### Option 1: Automated Installation (Recommended)
+
+**Linux/macOS:**
 ```bash
-# Clone the repository
-git clone <chatit-repo>
-cd chatit
-
-# Install dependencies (with Bun)
-bun install
-
-# Or with npm
-npm install
+git clone https://github.com/yourusername/chatit.git ~/chatit && \
+cd ~/chatit && \
+chmod +x install.sh && \
+./install.sh
 ```
 
-### Run
+**Windows:**
+```powershell
+git clone https://github.com/yourusername/chatit.git $env:USERPROFILE\chatit; `
+cd $env:USERPROFILE\chatit; `
+.\install.bat
+```
+
+**What the installer does:**
+- ✅ Checks Node.js 18+ or Bun
+- ✅ Installs dependencies
+- ✅ Creates `~/.claude/` config directory
+- ✅ **Adds to PATH automatically**
+- ✅ Sets up global `chatit` command
+- ✅ Optionally configures API provider
+
+### Option 2: Manual Installation
 
 ```bash
-# Using Bun
-bun run src/main.tsx
+# 1. Clone
+git clone https://github.com/yourusername/chatit.git
+cd chatit
 
-# Or with Node.js
-npm run dev
+# 2. Install dependencies
+bun install
+# OR
+npm install
+
+# 3. Run
+bun run src/main.tsx "Your prompt"
 ```
 
 ---
 
-## Configuration
+## Verify Installation
 
-First run will prompt you to:
-1. **Choose a provider** — Anthropic, OpenCode, OpenRouter, or skip
-2. **Pick a theme** — dark, light, white, or ANSI variants
-3. **Configure authentication** — API key, OAuth, or environment variables
+After installation, verify everything works:
 
-### Provider Options
+```bash
+# Check if chatit command is available
+chatit --version
 
-#### Anthropic (Default)
-Use Claude models with an Anthropic API key.
+# Run first time setup
+chatit
+
+# Test with a simple prompt
+chatit "Hello, what can you do?"
+```
+
+---
+
+## Configure Your Machine
+
+### Add to PATH (If Not Already Done)
+
+**Linux/macOS:**
+```bash
+# Check if already in PATH
+echo $PATH | grep .local/bin
+
+# If not, add to ~/.bashrc or ~/.zshrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Windows:**
+The installer automatically adds `%USERPROFILE%\.chatit` to PATH.  
+Restart PowerShell or CMD after installation.
+
+### Set API Key
+
+```bash
+# Anthropic (requires API key)
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+# Or use interactive login
+chatit /login
+
+# Verify it works
+chatit "Hello!"
+```
+
+---
+
+## First Run
+
+---
+
+## Provider Configuration
+
+First run will prompt you to choose a provider. You can also reconfigure anytime:
+
+```bash
+chatit /provider
+```
+
+### Anthropic (Default)
+
+**Setup:**
 ```bash
 export ANTHROPIC_API_KEY="sk-ant-..."
 chatit "analyze this code"
 ```
 
-#### OpenRouter (Free Tier)
-Use free models like Gemini Flash, Mistral, Llama.
+**Or interactive login:**
 ```bash
-# No API key needed for free tier
-chatit --provider openrouter
+chatit /login
 ```
 
-#### OpenCode (Local)
-Connect to a local OpenCode server running 75+ provider integrations.
+**Available models:**
+- `claude-opus-4-6` (most capable)
+- `claude-sonnet-4-6` (balanced)
+- `claude-haiku-4-5` (fast)
+
+**Pricing:** Usage-based ($20 per million input tokens, $60 per million output tokens)
+
+---
+
+### OpenRouter (Free Tier - No API Key)
+
+**Setup (completely free):**
 ```bash
-# Start OpenCode server separately
+chatit --provider openrouter
+chatit /model  # Select free model
+```
+
+**Free models available:**
+- **Gemini Flash 1.5** (Google - fastest)
+- **Mistral 7B** (Mistral - capable)
+- **Llama 3 8B** (Meta - open source)
+- **Qwen 2 7B** (Alibaba - high performance)
+
+**Cost:** Completely FREE for free tier models  
+**Get started in:** < 1 minute
+
+---
+
+### OpenCode (Local Server - 75+ Providers)
+
+**Install and setup:**
+```bash
+# Install OpenCode globally
+npm install -g opencode
+
+# Start server
 opencode server
-# Then connect
+
+# In another terminal, configure Chatit
+export OPENCODE_ENDPOINT="http://localhost:4096"
 chatit --provider opencode
+```
+
+**Benefits:**
+- Support for 75+ LLM providers
+- Run completely locally (no internet required)
+- Privacy-friendly (data stays local)
+- Free with local models
+
+---
+
+## Environment Variables
+
+```bash
+# Anthropic
+export ANTHROPIC_API_KEY="sk-ant-..."
+export ANTHROPIC_MODEL="claude-opus-4-6"
+
+# OpenRouter (optional)
+export OPENROUTER_API_KEY="..."
+
+# Provider selection
+export CHATIT_PROVIDER="anthropic|openrouter|opencode"
+
+# OpenCode server
+export OPENCODE_ENDPOINT="http://localhost:4096"
+
+# Behavior
+export DEBUG=1
+export CHATIT_AUTOACCEPT=1
+```
+
+**Make permanent (add to `~/.bashrc`, `~/.zshrc`, or `~/.profile`):**
+```bash
+echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ---
 
-## Commands
+## Common Commands
 
-### Core Commands
-- `/model` — Switch AI model
-- `/theme` — Change color theme
-- `/provider` — Switch AI provider
-- `/commit` — Create a git commit
-- `/memory` — Manage persistent memory
-- `/config` — Edit settings
+```bash
+chatit /help              # Show all commands
+chatit /theme             # Change color theme
+chatit /model             # Switch AI model
+chatit /provider          # Switch AI provider
+chatit /config            # View/edit settings
+chatit /commit            # AI-assisted git commit
+chatit /diff              # Review recent changes
+chatit /memory            # Manage persistent memory
+chatit /cost              # Check token usage/costs
+chatit /login             # Authenticate (OAuth or API key)
+chatit /doctor            # Diagnose issues
+```
 
-### Tools
-Available tools for the AI:
+---
+
+## Troubleshooting
+
+### "chatit: command not found"
+
+**Solution 1: Add to PATH**
+```bash
+# Check if in PATH
+echo $PATH | grep ".local/bin"
+
+# If not, add it
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+# Restart terminal and try again
+chatit --version
+```
+
+**Solution 2: Use full path**
+```bash
+~/.chatit/chatit "Your prompt"
+# or
+~/.local/bin/chatit "Your prompt"
+```
+
+### "Node.js 18+ required"
+
+**Install Node.js:**
+```bash
+# Visit https://nodejs.org and download 18+
+# Or use a package manager:
+
+# macOS (with Homebrew)
+brew install node
+
+# Ubuntu/Debian
+sudo apt update
+sudo apt install nodejs npm
+
+# Windows (with Chocolatey)
+choco install nodejs
+```
+
+**Or install Bun (faster alternative):**
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+### "API key not working"
+
+```bash
+# Verify key is set
+echo $ANTHROPIC_API_KEY
+
+# Check it's valid
+chatit /doctor
+
+# Re-authenticate
+chatit /login
+
+# Test connection
+chatit "Hello, can you see me?"
+```
+
+### "npm install fails"
+
+```bash
+# Clear npm cache
+npm cache clean --force
+
+# Update npm
+npm install -g npm@latest
+
+# Try again
+npm install
+```
+
+### "Out of context / Too many tokens"
+
+```bash
+# Compress context
+chatit /compact
+
+# Or start fresh conversation
+chatit --no-history "New topic"
+```
+
+### Windows PATH Issues
+
+If `chatit` is not found in PowerShell after installation:
+
+```powershell
+# Restart PowerShell or cmd as Administrator
+# Then try:
+chatit --version
+
+# If still not found, manually add to PATH:
+$env:Path += ";$env:USERPROFILE\.chatit"
+chatit --version
+```
+
+---
+
+## Features & Tools
+
+### AI Tools
 - **Read/Write/Edit** — File operations
 - **Bash** — Shell command execution
 - **Glob/Grep** — Code search
 - **WebFetch** — Fetch web content
 - **Agent** — Spawn sub-agents for parallel tasks
+
+### Themes
+
+| Theme | Style | Accent |
+|-------|-------|--------|
+| `dark` | Dark background | Orange |
+| `light` | Light background | Orange |
+| **white** | Pure white ⭐ NEW | **Chatit Blue** |
+| `light-ansi` | Light ANSI only | ANSI colors |
+| `dark-ansi` | Dark ANSI only | ANSI colors |
+| `light-daltonized` | Color-blind friendly | Adjusted colors |
+| `dark-daltonized` | Color-blind friendly | Adjusted colors |
+
+Switch themes:
+```bash
+chatit /theme
+```
 
 ---
 
@@ -124,42 +449,140 @@ Choose the text style that looks best with your terminal:
 
 ---
 
-## Free Tier Models (OpenRouter)
+## Documentation
 
-Chatit includes built-in support for free tier models without requiring an API key:
+After installation, read these guides for detailed information:
 
-- **Gemini Flash 1.5** — Google's fast model (free quota)
-- **Mistral 7B** — Open-source instruction model (free)
-- **Llama 3 8B** — Meta's open-source model (free)
-- **Qwen 2 7B** — Alibaba's high-performance model (free)
+| Document | Purpose | Read with |
+|----------|---------|-----------|
+| **QUICK_START.md** | Getting started quickly | `cat ~/.chatit/QUICK_START.md` |
+| **INSTALLATION_GUIDE.md** | Detailed setup instructions | `cat ~/.chatit/INSTALLATION_GUIDE.md` |
+| **COMMANDS_REFERENCE.md** | Complete command reference | `cat ~/.chatit/COMMANDS_REFERENCE.md` |
+| **CHATIT_README.md** | Full user guide | `cat ~/.chatit/CHATIT_README.md` |
+| **FILES_CREATED_SUMMARY.md** | What was created | `cat ~/.chatit/FILES_CREATED_SUMMARY.md` |
 
-To use free models:
+---
+
+## Getting Help
+
+### In-App Help
 ```bash
-chatit --provider openrouter
-> /model
-> Choose: "Gemini Flash 1.5 (Google — free)"
+chatit /help              # Show all commands
+chatit /doctor            # Diagnose installation issues
+chatit --version          # Show version
+```
+
+### Enable Debug Mode
+```bash
+export DEBUG=1
+chatit "Your prompt"      # Detailed logging
+```
+
+### Online Resources
+- 📍 **GitHub**: https://github.com/yourusername/chatit
+- 🐛 **Issues**: https://github.com/yourusername/chatit/issues
+- 💡 **Discussions**: https://github.com/yourusername/chatit/discussions
+
+---
+
+## Configuration Files
+
+Your configuration is stored in:
+
+**Linux/macOS:**
+```bash
+~/.claude/              # Global config directory
+~/.chatit/              # Installation directory
+```
+
+**Windows:**
+```
+%USERPROFILE%\.claude\
+%USERPROFILE%\.chatit\
+```
+
+**Key files:**
+```bash
+~/.claude/settings.json    # Your preferences
+~/.claude/config.json      # Global configuration
+~/.claude/cache/           # Temporary caches
+~/.claude/memory/          # Persistent memory
 ```
 
 ---
 
-## Environment Variables
+## Updating Chatit
 
 ```bash
-# Provider selection
-CHATIT_PROVIDER=openrouter|opencode|anthropic
+# Navigate to installation
+cd ~/.chatit
 
-# Anthropic API key
-ANTHROPIC_API_KEY=sk-ant-...
+# Pull latest changes
+git pull origin main
 
-# OpenRouter API key (optional for free tier)
-OPENROUTER_API_KEY=...
+# Reinstall dependencies
+bun install  # or: npm install
 
-# OpenCode server URL
-OPENCODE_ENDPOINT=http://localhost:4096
+# Verify update
+chatit --version
+```
 
-# Additional settings
-ANTHROPIC_MODEL=claude-opus-4-6
-DEBUG=1  # Enable debug logging
+---
+
+## Uninstalling
+
+```bash
+# Remove installation
+rm -rf ~/.chatit
+
+# Remove global command
+sudo rm /usr/local/bin/chatit
+# or
+rm ~/.local/bin/chatit
+
+# (Optional) Remove config files
+rm -rf ~/.claude
+```
+
+---
+
+## Usage Examples
+
+### Ask for Code Review
+```bash
+chatit "Review this code for bugs and performance issues"
+```
+
+### Refactor Code
+```bash
+chatit "Refactor this function to be more readable"
+```
+
+### Write Tests
+```bash
+chatit "Write unit tests for this function"
+```
+
+### Pipe File Content
+```bash
+cat myfile.js | chatit "Explain what this code does"
+```
+
+### Interactive Session
+```bash
+chatit
+> /theme
+> white
+> chatit "Analyze this codebase"
+> /model
+> /provider
+> exit
+```
+
+### Git Operations
+```bash
+chatit /commit         # AI-assisted commit message
+chatit /diff           # Review recent changes
 ```
 
 ---
