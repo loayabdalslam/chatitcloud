@@ -8,12 +8,12 @@
 
 ### Linux / macOS
 ```bash
-git clone https://github.com/yourusername/chatit.git ~/chatit && cd ~/chatit && chmod +x install.sh && ./install.sh
+git clone https://github.com/loayabdalslam/chatitcloud.git ~/chatit && cd ~/chatit && chmod +x install.sh && ./install.sh
 ```
 
 ### Windows (PowerShell - Run as Administrator)
 ```powershell
-git clone https://github.com/yourusername/chatit.git $env:USERPROFILE\chatit; cd $env:USERPROFILE\chatit; .\install.bat
+git clone https://github.com/loayabdalslam/chatitcloud.git $env:USERPROFILE\chatit; cd $env:USERPROFILE\chatit; .\install.bat
 ```
 
 **⏱️ Takes ~2-3 minutes**  
@@ -69,9 +69,9 @@ chatit /help
 
 ## Repository Link
 
-📍 **GitHub**: https://github.com/yourusername/chatit  
-📍 **Issues**: https://github.com/yourusername/chatit/issues  
-📍 **Discussions**: https://github.com/yourusername/chatit/discussions
+📍 **GitHub**: https://github.com/loayabdalslam/chatitcloud.git 
+📍 **Issues**: https://github.com/loayabdalslam/chatitcloud/issues  
+📍 **Discussions**: https://github.com/loayabdalslam/chatitcloud/discussions
 
 ---
 
